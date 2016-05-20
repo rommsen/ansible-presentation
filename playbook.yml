@@ -4,6 +4,35 @@
 - hosts: app
   become: yes
 
+  vars:
+    timezone: Europe/Berlin
+    php_packages:
+      - php5
+      - php5-cli
+      - php5-curl
+      - php5-fpm
+      - php5-gd
+      - php5-imagick
+      - php5-intl
+      - php5-mysql
+      - php5-pgsql
+      - php5-sqlite
+      - php5-tidy
+      - php5-xdebug
+      - php-apc
+
+    php_ppa: ondrej/php5-5.6
+    php_memory_limit: 512M
+    php_upload_max_filesize: 20M
+    php_post_max_size: 20M
+    php_max_input_vars: 1000
+    php_max_execution_time: 600
+    php_session_gc_probability: 1
+    php_session_gc_divisor: 1000
+    php_session_gc_maxlifetime: 3600
+    php_realpath_cache_size: 4096k
+    php_realpath_cache_ttl: 7200
+
   tasks:
     - name: Add ppa repository for stable nginx
       apt_repository: repo=ppa:nginx/stable
@@ -24,4 +53,33 @@
         owner: www-data
         group: www-data
 
+    - name: Add ppa repository for current PHP
+      apt_repository: repo=ppa:{{ php_ppa }} update_cache=yes
+
+    - name: Install PHP packages
+      apt: pkg={{ item }} state=latest
+      with_items: "{{ php_packages }}"
+
+    - name: Copy php.ini template
+      template:
+        src: php.ini.tpl
+        dest: /etc/php5/fpm/php.ini
+
+    - name: Copy default vhost config
+      template:
+        src: "default.tpl"
+        dest: "/etc/nginx/sites-available/default"
+
+    - name: Copy phpinfo file
+      template:
+        src: "info.php"
+        dest: "/var/www/html/info.php"
+        owner: www-data
+        group: www-data
+
+    - name: Ensure Nginx is running and enabled on boot.
+      service: name=nginx state=restarted
+
+    - name: Ensure php-fpm is restarted.
+      service: name=php5-fpm state=restarted
 
