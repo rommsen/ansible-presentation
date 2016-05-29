@@ -1,0 +1,22 @@
+---
+
+deploy_user: vagrant
+
+timezone: Europe/Berlin
+
+ubuntu_release: trusty
+
+ntp_servers:
+  - 0.de.pool.ntp.org
+  - 1.de.pool.ntp.org
+  - 3.de.pool.ntp.org
+  - 4.de.pool.ntp.org
+
+devops_email: roman.sachse@googlemail.com
+
+fail2ban_ignoreip: 127.0.0.1
+
+server_users:
+  - "{{ deploy_user }}"
+
+default_locale: de_DE.UTF-8

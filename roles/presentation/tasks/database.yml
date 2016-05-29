@@ -1,0 +1,21 @@
+---
+
+- debug: msg=hallo
+
+- name: Create mysql database
+  mysql_db:
+    name: "{{ db_name }}"
+    state: present
+    collation: utf8_general_ci
+    login_user: root
+    login_password: "{{ db_pass }}"
+
+- name: Create presentation user for mysql database
+  mysql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_pass }}"
+    host: "%"
+    priv: "{{ db_name }}.*:ALL"
+    state: present
+    login_user: root
+    login_password: "{{ db_pass }}"

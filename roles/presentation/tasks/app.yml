@@ -1,0 +1,35 @@
+---
+
+- name: Copy index.html
+  template:
+    src: "index.html"
+    dest: "/var/www/html/index.html"
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_user }}"
+
+- name: Copy default vhost config
+  template:
+    src: "default.tpl"
+    dest: "{{ webserver_vhost_path_available }}/default"
+  notify: "restart nginx"
+
+- name: Copy phpinfo file
+  template:
+    src: "info.php"
+    dest: "/var/www/html/info.php"
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_user }}"
+
+- name: Create directory for adminer
+  file:
+    path: "/var/www/html/db"
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_user }}"
+    state: directory
+
+- name: Copy adminer script to devops root directory
+  copy:
+    src: "adminer.php"
+    dest: "/var/www/html/db"
+    owner: "{{ webserver_user }}"
+    group: "{{ webserver_user }}"

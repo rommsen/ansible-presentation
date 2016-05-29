@@ -1,0 +1,9 @@
+---
+
+- name: Install Security Packages
+  apt: pkg={{ item }} state=latest
+  with_items: "{{ security_packages }}"
+
+- { include: unattended-upgrades.yml }
+- { include: fail2ban.yml }
+- { include: logwatch.yml }

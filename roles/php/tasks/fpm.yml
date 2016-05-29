@@ -1,0 +1,57 @@
+---
+
+# Basiert auf: https://ma.ttias.be/a-better-way-to-run-php-fpm/
+# Lineinfile hängt immer an: http://stackoverflow.com/questions/19390600/ansible-lineinfile-duplicates-line
+# http://myshell.co.uk/blog/2012/07/adjusting-child-processes-for-php-fpm-nginx/
+
+# nginx error connect to php5-fpm.sock failed: http://stackoverflow.com/a/23596317
+- name: Set permissions on socket - owner
+  lineinfile:
+    dest: "/etc/php5/fpm/pool.d/www.conf"
+    state: present
+    regexp: "^;?listen.{{ item }}"
+    line: "listen.{{ item }} = {{ webserver_user }}"
+  with_items:
+    - "owner"
+    - "group"
+  notify: restart php5-fpm
+
+- name: Set fpm process manager type
+  lineinfile:
+    dest: "/etc/php5/fpm/pool.d/www.conf"
+    state: present
+    regexp: "^pm ="
+    line: "pm = {{ php_fpm_pm_type }}"
+  notify: restart php5-fpm
+
+- name: Set fpm pm.max_children
+  lineinfile:
+    dest: "/etc/php5/fpm/pool.d/www.conf"
+    state: present
+    regexp: "^pm.max_children = "
+    line: "pm.max_children = {{ php_fpm_pm_max_children }}"
+  notify: restart php5-fpm
+
+- name: Set fpm pm.max_requests
+  lineinfile:
+    dest: "/etc/php5/fpm/pool.d/www.conf"
+    state: present
+    regexp: "^;?pm.max_requests = "
+    line: "pm.max_requests = {{ php_fpm_pm_max_requests }}"
+  notify: restart php5-fpm
+
+- name: Set fpm pm.max_requests
+  lineinfile:
+    dest: "/etc/php5/fpm/pool.d/www.conf"
+    state: present
+    regexp: "^;?pm.process_idle_timeout = "
+    line: "pm.process_idle_timeout = {{ php_fpm_pm_idle_timeout }}"
+  notify: restart php5-fpm
+
+- name: Enable catch_worker_output for debugging purposes
+  lineinfile:
+    dest: "/etc/php5/fpm/pool.d/www.conf"
+    state: present
+    regexp: "^;?catch_workers_output = "
+    line: "catch_workers_output = yes"
+  notify: restart php5-fpm

@@ -1,0 +1,35 @@
+---
+
+- name: Ensure fail2ban is running and enabled on boot.
+  service: name=fail2ban state=started enabled=yes
+
+- name: Install fail2ban jail.conf
+  template:
+    src: "jail.local.tpl"
+    dest: "/etc/fail2ban/jail.local"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: restart fail2ban
+
+- name: Install fail2ban filters
+  template:
+    src: "{{ item }}.tpl"
+    dest: "/etc/fail2ban/filter.d/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "nginx-noscript.conf"
+  notify: restart fail2ban
+
+- name: Install fail2ban actions
+  template:
+    src: "{{ item }}.tpl"
+    dest: "/etc/fail2ban/action.d/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "ufw.conf"
+  notify: restart fail2ban

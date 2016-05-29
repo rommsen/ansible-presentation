@@ -1,0 +1,40 @@
+---
+
+- name: Add users
+  user: name={{ item }}
+  with_items: "{{ server_users }}"
+
+- name: Create directory for Source Files
+  file:
+    dest: "/home/{{ item }}/.dotfiles/source"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    state: directory
+    mode: "0755"
+  with_items: "{{ server_users }}"
+
+- name: Copy .bashrc
+  copy:
+    src: ".bashrc"
+    dest: "/home/{{ item }}/.bashrc"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+  with_items: "{{ server_users }}"
+
+- name: Copy Source Files
+  copy:
+    src: "source/{{ item.0 }}"
+    dest: "/home/{{ item.1 }}/.dotfiles/source/{{ item.0 }}"
+    owner: "{{ item.1 }}"
+    group: "{{ item.1 }}"
+  with_nested:
+    - "{{ source_files }}"
+    - "{{ server_users }}"
+
+- name: Remove unused files
+  file:
+    dest: "/home/{{ item.1 }}/.dotfiles/source/{{ item.0 }}"
+    state: absent
+  with_nested:
+    - ["50_ipark.sh"]
+    - "{{ server_users }}"

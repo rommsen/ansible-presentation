@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+  roles:
+    - franklinkim.ntp
+  vars:
+    ntp_servers:
+      - 0.de.pool.ntp.org
+      - 1.de.pool.ntp.org
+      - 3.de.pool.ntp.org
+      - 4.de.pool.ntp.org
+    ntp_peers:
+      - 127.0.0.4

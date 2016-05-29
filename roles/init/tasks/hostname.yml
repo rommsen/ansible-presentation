@@ -1,0 +1,21 @@
+- name: Hostname | Copy Initscript template
+  template:
+    src: hostname_vps
+    dest: /etc/init.d/hostname_vps
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Hostname | Copy my.hosts template
+  template:
+    src: my.hosts
+    dest: /etc/my.hosts
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Hostname | Start service on boot
+  service:
+    name: hostname_vps
+    state: started
+    enabled: yes

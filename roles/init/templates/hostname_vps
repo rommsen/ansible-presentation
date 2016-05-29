@@ -1,0 +1,25 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides: hostname_vps
+# Required-Start:
+# Required-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 6
+# Short-Description: set hostname.
+# Description: Host Europe virtual server hostname setting script.
+### END INIT INFO
+#
+# chkconfig: 2345 7 93
+# description: Host Europe virtual server hostname setting script
+#
+# /etc/init.d/hostname_vps
+#
+HOSTNAME={{ hostname }}
+[ -f /etc/hostname ] && echo $HOSTNAME > /etc/hostname
+[ -f /etc/HOSTNAME ] && echo $HOSTNAME > /etc/HOSTNAME
+[ -f /etc/mailname ] && echo $HOSTNAME > /etc/mailname
+[ -f /etc/sysconfig/network ] && sed -i.hebackup s/HOSTNAME=".*"/HOSTNAME="$HOSTNAME"/ /etc/sysconfig/network
+/bin/hostname $HOSTNAME
+[ -f /etc/my.resolv.conf ] && cp /etc/my.resolv.conf /etc/resolv.conf
+[ -f /etc/my.hosts ] && cp /etc/my.hosts /etc/hosts
+exit 0

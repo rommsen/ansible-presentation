@@ -1,0 +1,16 @@
+---
+
+- name: Configuring ntp
+  template:
+    src: etc-ntp.conf.j2
+    dest: /etc/ntp.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart ntp
+
+- name: Configuring service
+  service:
+    name: ntp
+    state: "{{ ntp_service_state }}"
+    enabled: "{{ ntp_service_enabled }}"

@@ -1,0 +1,24 @@
+---
+# For more information about default variables see:
+# http://www.ansibleworks.com/docs/playbooks_variables.html#id26
+#
+
+# package name (version)
+ntp_package: ntp
+# list of server
+ntp_servers:
+ - 0.ubuntu.pool.ntp.org
+ - 1.ubuntu.pool.ntp.org
+ - 2.ubuntu.pool.ntp.org
+ - 3.ubuntu.pool.ntp.org
+ - ntp.ubuntu.com
+# list of peer hosts (typically on the same network)
+ntp_peers: []
+# start on boot
+ntp_service_enabled: yes
+# current state: started, stopped
+ntp_service_state: started
+#  drift file
+ntp_driftfile: /var/lib/ntp/ntp.drift
+# stats dir
+ntp_statsdir: /var/log/ntpstats/

@@ -1,0 +1,35 @@
+---
+
+sys_packages:
+  - curl
+  - wget
+  - python-software-properties
+  - vim
+  - git
+  - software-properties-common
+  - python
+  - python-dev
+  - python-setuptools
+  - acl
+  - g++
+  - make
+  - zip
+  - unzip
+  - mosh
+
+source_files:
+  - 10_misc.sh
+  - 40_ipark.sh
+  - 50_aliases.sh
+  - 50_devel.sh
+  - 50_editor.sh
+  - 50_file.sh
+  - 50_functions.sh
+  - 50_history.sh
+  - 50_misc.sh
+  - 50_prompt.sh
+  - 50_ubuntu.sh
+
+ssh_public_keys:
+  - "{{ lookup('file', 'timo.pub') }}"
+  - "{{ lookup('file', 'roman_mobile.pub') }}"

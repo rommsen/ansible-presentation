@@ -1,0 +1,6 @@
+---
+
+security_packages:
+  - unattended-upgrades
+  - fail2ban
+  - logwatch

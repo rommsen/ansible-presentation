@@ -1,0 +1,12 @@
+---
+
+- name: Install rdiff-backup
+  apt: pkg=rdiff-backup state=latest
+
+# Alles Systeme in der "backup" Gruppe sind Backup-Server
+#- include: server.yml
+#  when: "'backup' in group_names"
+
+# Alles Systeme, die nicht in der "backup" Gruppe sind, sind Backup-Clients
+#- include: client.yml
+#  when: "'backup' not in group_names"

@@ -31,4 +31,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     backup.vm.box = "ubuntu/trusty64"
     backup.vm.network :private_network, ip: "192.168.60.6"
   end
+
+  # DB server.
+  config.vm.define "db" do |db|
+    db.vm.hostname = "db-presentation.dev"
+    db.vm.box = "ubuntu/trusty64"
+    db.vm.network :private_network, ip: "192.168.60.7"
+    db.vm.network :forwarded_port, guest: 5432, host: 5432
+  end
+
+  config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "./provision.yml"
+      ansible.inventory_path = "./inventory"
+      ansible.limit = 'all'
+  end
+
 end

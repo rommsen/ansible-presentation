@@ -1,0 +1,18 @@
+---
+
+php_ppa: ondrej/php5-5.6
+php_memory_limit: 512M
+php_upload_max_filesize: 20M
+php_post_max_size: 20M
+php_max_input_vars: 1000
+php_max_execution_time: 600
+php_session_gc_probability: 1
+php_session_gc_divisor: 1000
+php_session_gc_maxlifetime: 3600
+php_realpath_cache_size: 4096k
+php_realpath_cache_ttl: 7200
+
+php_fpm_pm_type: ondemand
+php_fpm_pm_max_children: 50
+php_fpm_pm_max_requests: 200
+php_fpm_pm_idle_timeout: 10s

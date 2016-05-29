@@ -1,0 +1,4 @@
+---
+mysql_key_buffer: 256M
+mysql_max_allowed_packet: 32M
+mysq_query_cache_size: 32M

@@ -1,0 +1,62 @@
+---
+- name: Add ppa repository for current PHP
+  apt_repository: repo=ppa:{{ php_ppa }} update_cache=yes
+
+- name: Install PHP packages
+  apt: pkg={{ item }} state=latest
+  with_items: "{{ php_packages }}"
+
+- name: Copy php.ini template
+  template: src=php.ini.tpl dest=/etc/php5/fpm/php.ini
+  notify: restart php5-fpm
+
+- name: Copy opcache.ini template
+  template: src=opcache.ini.tpl dest=/etc/php5/mods-available/opcache.ini
+  notify: restart php5-fpm
+
+- name: Copy xdebug.ini template
+  template: src=xdebug.ini.tpl dest=/etc/php5/mods-available/xdebug.ini
+  notify: restart php5-fpm
+
+- name: ensure timezone is set in cli php.ini
+  lineinfile:
+    dest: /etc/php5/cli/php.ini
+    regexp: "date.timezone ="
+    line: "date.timezone = {{ timezone }}"
+
+- name: Deactivate xdebug in cli and fpm
+  file:
+    dest: "/etc/php5/{{ item }}/conf.d/20-xdebug.ini"
+    state: absent
+  with_items:
+    - "cli"
+    - "fpm"
+  notify: restart php5-fpm
+
+- name: Set umask to make sure files are created group-writable
+  lineinfile:
+    dest: /etc/init/php5-fpm.conf
+    line: "umask 0002"
+    insertafter: "^author"
+  notify: restart php5-fpm
+
+
+# eigene logrotate config  (siehe Kommentar in Datei)
+- name: Copy logrotate config
+  copy:
+    src: "logrotate.conf"
+    dest: "/etc/logrotate.d/php5-fpm"
+    owner: "root"
+    group: "root"
+
+
+# eigenes upstart script (siehe Kommentar in Datei)
+- name: Update upstart script
+  copy:
+    src: "upstart.conf"
+    dest: "/etc/init/php5-fpm.conf"
+    owner: "root"
+    group: "root"
+  notify: restart php5-fpm
+
+- { include: fpm.yml, tags: ["fpm"] }

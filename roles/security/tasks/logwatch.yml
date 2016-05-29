@@ -1,0 +1,18 @@
+---
+
+# Bis wir ein volles Loggingsystem haben, sendet Logwatch (siehe z.B.
+# https://www.debinux.de/2014/04/logwatch-zur-automatischen-und-manuellen-log-auswertung/
+# jeden Tag eine Übersicht über die wichtigsten Log-Ereignisse an `devops@ipark-media.de`
+
+- name: Remove default daily logwatch mail
+  become_user: root
+  file:
+    dest: "/etc/cron.daily/00logwatch"
+    state: absent
+
+
+- name: Make logwatch mail {{ devops_email }} daily
+  cron:
+    name: Logwatch daily
+    job: "/usr/sbin/logwatch --output mail --mailto {{ devops_email }} --detail med  > /dev/null 2>&1"
+    special_time: "daily"

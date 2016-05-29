@@ -1,0 +1,31 @@
+---
+- hosts: all
+  become: yes
+  remote_user: "{{ deploy_user }}"
+  roles:
+    - { role: init, tags: ["init"]}
+    - { role: security, tags: ["security"]}
+    - { role: franklinkim.ntp, tags: ["ntp"] }
+
+- hosts: backup
+  become: yes
+  remote_user: "{{ deploy_user }}"
+  roles:
+    - { role: backup, tags: ["backup"]}
+
+- hosts: app
+  become: yes
+  remote_user: "{{ deploy_user }}"
+  roles:
+    - { role: nginx, tags: ["nginx"] }
+    - { role: php, tags: ["php"] }
+    - { role: backup, tags: ["backup"]}
+    - { role: presentation, tags: ["presentation"]}
+
+- hosts: database
+  become: yes
+  remote_user: "{{ deploy_user }}"
+  roles:
+    - { role: mysql, tags: ["mysql"] }
+    - { role: presentation, tags: ["presentation"]}
+

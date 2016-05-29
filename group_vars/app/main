@@ -1,0 +1,5 @@
+---
+
+webserver_user: www-data
+webserver_vhost_path_available: "/etc/nginx/sites-available"
+webserver_vhost_path_enabled: "/etc/nginx/sites-enabled"

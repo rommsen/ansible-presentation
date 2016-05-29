@@ -1,0 +1,14 @@
+---
+
+# Damit wir nicht einen ganzen Mailserver installieren müssen, wir aber trotzdem Mails vom Server verschicken können.
+# http://tecadmin.net/send-email-smtp-server-linux-command-line-ssmtp/
+- name: Install ssmtp
+  apt: pkg=ssmtp state=latest
+
+- name: copy ssmtp config
+  template:
+    src: "ssmtp.conf.tpl"
+    dest: "/etc/ssmtp/ssmtp.conf"
+    owner: root
+    group: root
+    mode: "0644"

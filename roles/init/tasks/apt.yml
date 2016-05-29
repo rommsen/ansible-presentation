@@ -1,0 +1,15 @@
+---
+
+- name: Update apt
+  apt: update_cache=yes cache_valid_time=3600
+
+# wichtig für Ansible
+- name: Install Python-Software-Properties
+  apt: pkg=python-software-properties state=latest
+
+- name: Update all packages to the latest version
+  apt: upgrade=dist
+
+- name: Install System Packages
+  apt: pkg={{ item }} state=latest
+  with_items: "{{ sys_packages }}"

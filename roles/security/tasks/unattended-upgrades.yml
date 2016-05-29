@@ -1,0 +1,13 @@
+---
+
+# https://thomas-leister.de/open-source/linux/ubuntu/ubuntu-server-automatische-security-upgrades-nachtraeglich-aktivieren/
+- name: Copy configuration for unattended-upgrades
+  template:
+    src: "{{ item }}.tpl"
+    dest: "/etc/apt/apt.conf.d/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "10periodic"
+    - "50unattended-upgrades"

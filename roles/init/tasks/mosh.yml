@@ -1,0 +1,20 @@
+---
+# based on https://stephen.rees-carter.net/thought/mosh-and-ufw-without-1000-open-ports
+
+- name: Copy Mosh Allow UFW script
+  copy:
+    src: mosh-allow-ufw
+    dest: /usr/local/bin/mosh-allow-ufw
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Mosh allow into sudoers
+  lineinfile:
+    dest: /etc/sudoers
+    line: "{{ item }} ALL=(ALL:ALL) NOPASSWD: /usr/local/bin/mosh-allow-ufw"
+    regexp: 'mosh-allow-ufw'
+    state: present
+    validate: 'visudo -cf %s'
+  with_items:
+    - "{{ deploy_user }}"

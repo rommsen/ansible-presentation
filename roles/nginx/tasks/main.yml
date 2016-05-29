@@ -1,0 +1,27 @@
+---
+
+- name: Add ppa repository for stable nginx
+  apt_repository: repo=ppa:nginx/stable update_cache=yes
+
+- name: Install Nginx
+  apt: pkg=nginx state=latest
+
+- name: Ensure Nginx is running and enabled on boot.
+  service: name=nginx state=started enabled=yes
+
+# aus https://github.com/h5bp/server-configs-nginx
+- name: Add H5BP Config
+  copy:
+    src: "h5bp"
+    dest: "/etc/nginx"
+    owner: "root"
+    group: "root"
+  notify: restart nginx
+
+# eigene logrotate config (siehe Kommentare in der Datei)
+- name: Copy logrotate config
+  copy:
+    src: "logrotate.conf"
+    dest: "/etc/logrotate.d/nginx"
+    owner: "root"
+    group: "root"
