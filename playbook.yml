@@ -1,0 +1,27 @@
+---
+
+# ein Play
+- hosts: app
+  become: yes
+
+  tasks:
+    - name: Add ppa repository for stable nginx
+      apt_repository: repo=ppa:nginx/stable
+
+    - name: Update apt
+      apt: update_cache=yes cache_valid_time=3600
+
+    - name: Install Nginx
+      apt: pkg=nginx state=latest
+
+    - name: Ensure Nginx is running and enabled on boot.
+      service: name=nginx state=started enabled=yes
+
+    - name: Copy index.html
+      template:
+        src: "index.html"
+        dest: "/var/www/html/index.html"
+        owner: www-data
+        group: www-data
+
+
