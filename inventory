@@ -1,0 +1,18 @@
+# Application Servers
+[app]
+app01 ansible_ssh_host=192.168.60.4
+app02 ansible_ssh_host=192.168.60.5
+
+# Database server
+[backup]
+backup01 ansible_ssh_host=192.168.60.6
+
+# Group 'multi' with all servers
+[all:children]
+app
+backup
+
+# Variables that will be applied to all servers
+[all:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
