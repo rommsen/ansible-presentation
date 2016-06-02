@@ -1,5 +1,6 @@
-#Repository for my talk about ansible
+#Repository for my talk about ansible 
 
+* Presentation: http://slides.com/romansachse/deck-1
 * `git checkout step1` => bare repository not needed
 * `git checkout step2` => first vagrant servers
 * `git checkout step3` => inventory
